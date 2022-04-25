@@ -75,6 +75,59 @@ public class BankingApp {
 
                 case 'b':
 
+                // apply for loan
+                case 'f':
+                    while(!quit){
+                        System.out.println("\nWhat type of loan would you like to apply for?\n");
+                        Loans loanType = new Loans();
+                        loanType.viewLoans();
+                        char loanChoice = Character.toLowerCase(scnr.next().charAt(0));
+                        
+                        switch(loanChoice){
+                              case 'a':
+                              case 'b':
+                              case 'd':
+                              case 'e':
+                              case 'f':
+                                  quit = true;
+                              default:
+                                  System.out.println("Try again");
+                         }
+                     }
+                
+                // frequently asked questions
+                case 'g':
+                  
+                    while(!quit){
+                        System.out.println("\nWhat would you like to know?\n"); // added \n
+                        Questions questions = new Questions();
+                        questions.viewQuestions();
+                        char questionChoice = Character.toLowerCase(scnr.next().charAt(0));
+                        
+                        switch(questionChoice){
+                              case 'a':
+                                  questions.viewAnswerA();
+                                  break;
+                              case 'b':
+                                  questions.viewAnswerB();
+                                  break;
+                              case 'c':
+                                  questions.viewAnswerC();
+                                  break;
+                              case 'd':
+                                  questions.viewAnswerD();
+                                  break;
+                              case 'e':
+                                  questions.viewAnswerE();
+                                  break;
+                              case 'f':
+                                  quit = true;
+                                  
+                              default:
+                                  System.out.println("Try Again");
+                        }
+                    }
+                    
                 // default for invalid options
                 default:
                     System.out.println("Invalid Response: ");
