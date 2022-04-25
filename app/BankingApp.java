@@ -9,11 +9,11 @@ public class BankingApp {
     public static void main(String arg[]){
         Scanner scnr = new Scanner(System.in);
         double userLoanRequestedAmount;
-        boolean hasChecking, hasSavings, quit;
+        boolean hasChecking, hasSavings, hasLoan1, hasLoan2, hasLoan3, hasLoan4, quit;
         char choice;
-        int i, loanID, userCreditScore;
-        loanID = 0;
-        hasChecking = hasSavings = quit = false;
+        int i, openLoans, userCreditScore;
+        openLoans = 0;
+        hasChecking = hasSavings = quit = hasLoan1 = hasLoan2 = hasLoan3 = hasLoan4 = false;
 
         //Accounts array list
         ArrayList<Account> accounts = new ArrayList<Account>();
@@ -21,8 +21,8 @@ public class BankingApp {
         // Array for loan class
         Loan[] loans;
         
-        //loan array can have up to 6 loans
-        loans = new Loan[5];
+        //loan array can have up to 4 loans
+        loans = new Loan[4];
         
         
         //Welcome Screen
@@ -41,7 +41,7 @@ public class BankingApp {
             
             switch(choice){
                 // quit application
-                case 'h':
+                case 'g':
                     scnr.close();
                     return;
 
@@ -74,15 +74,15 @@ public class BankingApp {
                                 quit = true;
                                 break;
                                 
-                                case 'b':
+                            case 'b':
                                 if(hasSavings == true){
-                                    System.out.println("You already have a checking account");
+                                    System.out.println("You already have a Savings account");
                                     quit = true;
                                     break;
                                 }
                                 
                                 Account savings = new Account();
-                                savings.setAccountName("Checking");
+                                savings.setAccountName("Savings");
                                 savings.setAccountType(false);
                                 savings.setAPR(0.60);
                                 
@@ -94,6 +94,7 @@ public class BankingApp {
                                 accounts.add(savings);
                                 quit = true;
                                 break;
+
                             case 'q':
                                 quit = true;
                                 break;
@@ -103,48 +104,69 @@ public class BankingApp {
                         }
                     }
                     break;
+
                 // display accounts and loans
                 case 'b':
                     for(i = 0; i < accounts.size();i++ ){
                         accounts.get(i).display();
                     }
+                    for(i = 0; i < loans.length; i++){
+                        if(loans[i] != null){
+                            loans[i].display();
+                        }
+                    }
                     break;
                 
                 // Deposit
                 case 'c':
-                    System.out.println("Choose what account to deposit to.");
+                    if(hasChecking == true || hasSavings == true){
+                        System.out.println("Choose what account to deposit to.");
+
                         for(i = 0; i < accounts.size();i++ ){
+                            System.out.printf("\nChoice (%d)", i);
                             accounts.get(i).display();
+                            System.out.println();
                         }
+
+                        System.out.print("\nChoose account: ");
+                        int accountChoice = scnr.nextInt();
+
+                        System.out.print("\nHow much to deposit?: ");
+                        accounts.get(accountChoice).setBalance(accounts.get(accountChoice).getBalance() + scnr.nextDouble());
+                        accounts.get(accountChoice).display();
+                        break;
+                    }
+
+                    System.out.println("ERROR: no accounts!");
+
                     break;
                     
                 // Withdraw
                 case 'd':
-                    System.out.println("Choose what account to withdraw from.");
+                    if(hasChecking == true || hasSavings == true){
+                        System.out.println("Choose what account to withdraw from.");
 
-                    for(i = 0; i < accounts.size();i++ ){
-                        accounts.get(i).display();
-                    }
+                        for(i = 0; i < accounts.size();i++ ){
+                            System.out.printf("\nChoice (%d)", i);
+                            accounts.get(i).display();
+                            System.out.println();
+                        }
 
-                    break;
-                    
-                // Transfer
-                case 'e':
-                    // checks if user has 2 accounts
-                    if(!hasChecking | !hasSavings){
-                        System.out.println("\nSORRY! You do not have enough accounts\n");
+                        System.out.print("\nChoose account: ");
+                        int accountChoice = scnr.nextInt();
+
+                        System.out.print("\nHow much to withdraw?: ");
+                        accounts.get(accountChoice).setBalance(accounts.get(accountChoice).getBalance() - scnr.nextDouble());
+                        accounts.get(accountChoice).display();
                         break;
                     }
 
-                    System.out.println("Choose \"from\" account");
-                        for(i = 0; i < accounts.size();i++ ){
-                            accounts.get(i).display();
-                        }
-                    System.out.println("Choose \"to\" account");
+                    System.out.println("ERROR: no accounts!");
+
                     break;
                     
                 // apply for loan
-                case 'f':
+                case 'e':
                     if(loans.length == 6){
                         System.out.print("You have the max allowed loans");
                         break;
@@ -155,7 +177,7 @@ public class BankingApp {
                     System.out.print("\nWhat is your credit score? ");
                     userCreditScore = scnr.nextInt();
 
-                    if(userCreditScore < 650 & userLoanRequestedAmount > 35000.00){
+                    if(userCreditScore < 650 && userLoanRequestedAmount > 35000.00){
                         System.out.println("Sorry, your credit score is too low for that amount");
                         break;
                     }
@@ -165,37 +187,82 @@ public class BankingApp {
                     String userLoanName = scnr.nextLine();
 
                     while(!quit){
-                        System.out.print("\nWhat is your loan type?\n\nStudent Loan (a)\nMortgage (b)\nPersonal Loan (c)\nAuto Loan (d)\n Enter Choice: ");
+                        System.out.print("\nWhat is your loan type?\n\nStudent Loan (a)\nMortgage (b)\nPersonal Loan (c)\nAuto Loan (d)\nEnter Choice: ");
                         char loanChoice = Character.toLowerCase(scnr.next().charAt(0));
 
                         switch(loanChoice){
                             // Student Loan
                             case 'a':
-                                loans[loanID] = new Loan(userLoanName, 0, 2.75, userLoanRequestedAmount);
+                                if(hasLoan1){
+                                    System.out.println("You already have a Student Loan!");
+                                    break;
+                                }
+                                loans[0] = new Loan(userLoanName, 120, 2.75, userLoanRequestedAmount);
+                                loans[0].setTotalLoan();
+                                loans[0].setMonthlyPayment();
+                                loans[0].display();
+
+                                openLoans++;
+                                hasLoan1 = true;
+                                quit = true;
                                 break;
 
                             // Mortgage
                             case 'b':
+                                if(hasLoan2){
+                                    System.out.println("You already have a Mortgage");
+                                    break;
+                                }
                                 System.out.print("Would you like a 15 year or 30 year term?\nEnter Choice: ");
                                 int termChoice = scnr.nextInt();
 
                                 // checks if user chose a valid option
-                                if(termChoice != 15 || termChoice != 30){
-                                    System.out.println("Invalid Choice");
+                                if(termChoice == 15 || termChoice == 30){
+                                    loans[1] = new Loan(userLoanName, (termChoice * 12), 2.81, userLoanRequestedAmount);
+                                    loans[1].setTotalLoan();
+                                    loans[1].setMonthlyPayment();
+                                    loans[1].display();
+    
+                                    openLoans++;
+                                    hasLoan2 = true;
+                                    quit = true;
                                     break;
                                 }
-
-                                loans[loanID] = new Loan(userLoanName, termChoice, 2.81, userLoanRequestedAmount);
+                                
+                                System.out.println(termChoice == 30);
+                                System.out.println("\nInvalid Choice");
                                 break;
 
                             // Personal Loan
                             case 'c':
-                                loans[loanID] = new Loan(userLoanName, 24, 9.34, userLoanRequestedAmount);
+                                if(hasLoan3){
+                                    System.out.println("You already have a Student Loan!");
+                                    break;
+                                }
+                                loans[2] = new Loan(userLoanName, 24, 9.34, userLoanRequestedAmount);
+                                loans[2].setTotalLoan();
+                                loans[2].setMonthlyPayment();
+                                loans[2].display();
+
+                                openLoans++;
+                                hasLoan3 = true;
+                                quit = true;
                                 break;
                             
                             // Auto Loan
                             case 'd':
-                                loans[loanID] = new Loan(userLoanName, 48, 4.98, userLoanRequestedAmount);
+                                if(hasLoan4){
+                                    System.out.println("You already have a Student Loan!");
+                                    break;
+                                }
+                                loans[3] = new Loan(userLoanName, 48, 4.98, userLoanRequestedAmount);
+                                loans[3].setTotalLoan();
+                                loans[3].setMonthlyPayment();
+                                loans[3].display();
+
+                                openLoans++;
+                                hasLoan4 = true;
+                                quit = true;
                                 break;
 
                             default:
@@ -207,7 +274,7 @@ public class BankingApp {
                     break;
                 
                 // frequently asked questions
-                case 'g':
+                case 'f':
                   
                     while(!quit){
                         System.out.println("\nWhat would you like to know?\n"); // added \n
@@ -254,11 +321,9 @@ public class BankingApp {
         System.out.println("b - View Accounts");
         System.out.println("c - Deposit");
         System.out.println("d - Withdraw");
-        System.out.println("e - Transfer");
-        System.out.println("f - Apply for Loan");
-        System.out.println("g - Frequently Asked Questions");
-        System.out.println("h - Quit");
+        System.out.println("e - Apply for Loan");
+        System.out.println("f - Frequently Asked Questions");
+        System.out.println("g - Quit");
     }
     
 }
-

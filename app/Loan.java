@@ -3,7 +3,7 @@ public class Loan {
    private int loanTerm;
    private double loanAmount, APR, totalLoan, monthlyPayment;
 
-   Loan(String name, int term, double apr, double amount){
+   public Loan(String name, int term, double apr, double amount){
       this.loanName = name;
       this.loanTerm = term;
       this.APR = apr;
@@ -27,7 +27,7 @@ public class Loan {
    }
 
    public void setMonthlyPayment(){
-      this.monthlyPayment = getTotalLoan() / 12;
+      this.monthlyPayment = getTotalLoan() / getTerm();
    }
 
    public double getMonthlyPayment(){
@@ -36,9 +36,9 @@ public class Loan {
    
    public void setTotalLoan(){
       if(APR == 0){
-         this.totalLoan = loanAmount;
+         this.totalLoan = getLoanAmount();
       }
-      this.totalLoan = loanAmount + (loanAmount * (APR * 100));
+      this.totalLoan = getLoanAmount() + (getLoanAmount() * (APR / 100));
    }
 
    public double getTotalLoan(){
@@ -46,6 +46,6 @@ public class Loan {
    }
 
    public void display(){
-
+      System.out.printf("\nLoan: %s\nLoan Amount: %.2f\nLoan Term: %d\nMonthly Payment: %.2f\n", getLoanName(), getTotalLoan(), getTerm(), getMonthlyPayment());
    }
 }

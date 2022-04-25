@@ -35,6 +35,6 @@ public class Account{
     }
 
     public void display(){
-        System.out.printf("Account: %s\nAPR: %.2f percent \nCurrent Balance: %.2f\n\n", accountName, apr, accountBalance);
+        System.out.printf("\nAccount: %s\nAPR: %.2f percent \nCurrent Balance: %.2f\n\n", accountName, apr, accountBalance);
      }
 }
