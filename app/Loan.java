@@ -1,37 +1,51 @@
 public class Loan {
-   private String loanType;
-   private double interestRate;
-   private double loanAmount;
-   
-   public void viewLoans() {
-      System.out.println("(a) Personal Loan");
-      System.out.println("(b) Auto Loan");
-      System.out.println("(c) Student Loan");
-      System.out.println("(d) Mortgage Loan");
-      System.out.println("(e) Quit");
+   private String loanName;
+   private int loanTerm;
+   private double loanAmount, APR, totalLoan, monthlyPayment;
+
+   Loan(String name, int term, double apr, double amount){
+      this.loanName = name;
+      this.loanTerm = term;
+      this.APR = apr;
+      this.loanAmount = amount;
    }
-   
-   public void setLoanType (String loanType) {
-      this.setLoanType = loanType
+
+   public String getLoanName(){
+      return loanName;
    }
-   
-   public String getLoanType() {
-      return loanType;
+
+   public double getAPR(){
+      return APR;
    }
-   
-   public void setInterestRate (double interestRate) {
-      this.setInterestRate = interestRate
+
+   public int getTerm(){
+      return loanTerm;
    }
-   
-   public double getInterestRate() {
-      return interestRate;
-   }
-   
-   public void setLoanAmount (double loanAmount) {
-      this.setLoanAmount = loanAmount
-   }
-   
-   public double getLoanAmount() {
+
+   public double getLoanAmount(){
       return loanAmount;
+   }
+
+   public void setMonthlyPayment(){
+      this.monthlyPayment = getTotalLoan() / 12;
+   }
+
+   public double getMonthlyPayment(){
+      return monthlyPayment;
+   }
+   
+   public void setTotalLoan(){
+      if(APR == 0){
+         this.totalLoan = loanAmount;
+      }
+      this.totalLoan = loanAmount + (loanAmount * (APR * 100));
+   }
+
+   public double getTotalLoan(){
+      return totalLoan;
+   }
+
+   public void display(){
+
    }
 }
